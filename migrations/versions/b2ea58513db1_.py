@@ -1,8 +1,8 @@
-"""added fee table
+"""empty message
 
-Revision ID: 6d571824b193
+Revision ID: b2ea58513db1
 Revises: 
-Create Date: 2020-12-20 15:31:26.940273
+Create Date: 2020-12-25 13:15:03.956609
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6d571824b193'
+revision = 'b2ea58513db1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -98,7 +98,7 @@ def upgrade():
     sa.Column('session', sa.String(length=10), nullable=False),
     sa.Column('transaction_date', sa.DateTime(), nullable=False),
     sa.Column('transaction_id', sa.String(length=255), nullable=False),
-    sa.Column('mode', sa.String(length=64), nullable=False),
+    sa.Column('mode', sa.Enum('NET_BANKING', 'DEBIT_CARD', 'CREDIT_CARD', 'OFFLINE', name='paymentmode'), nullable=False),
     sa.Column('months', sa.String(length=64), nullable=False),
     sa.ForeignKeyConstraint(['student_id'], ['students.id'], ),
     sa.PrimaryKeyConstraint('id')

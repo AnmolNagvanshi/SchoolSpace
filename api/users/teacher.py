@@ -5,8 +5,8 @@ from werkzeug.utils import secure_filename
 from app import app, db
 from flask import request
 from datetime import date
-from models.teacher import Teacher
-from models.classes import Classes
+from models.users.teacher import Teacher
+from models.academic.classes import Classes
 
 
 @app.route('/teachers', methods=['POST'])

@@ -1,7 +1,7 @@
 from flask import request
 
 from app import app
-from models.enquiry import Enquiry
+from models.academic.enquiry import Enquiry
 
 
 @app.route('/enquiry', methods=['POST'])

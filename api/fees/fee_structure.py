@@ -1,6 +1,6 @@
 from flask import request
 from app import app
-from models.fee_structure import FeeStructure
+from models.fees.fee_structure import FeeStructure
 
 
 @app.route('/fee-structure', methods=['POST'])

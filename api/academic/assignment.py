@@ -5,7 +5,7 @@ from flask import request, send_from_directory
 from werkzeug.utils import secure_filename
 
 from app import app, db
-from models.assignment import Assignment
+from models.academic.assignment import Assignment
 
 
 @app.route('/assignment', methods=['POST'])

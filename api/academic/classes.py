@@ -1,6 +1,6 @@
 from flask import request
 from app import app, db
-from models.classes import Classes
+from models.academic.classes import Classes
 
 
 @app.route('/classes', methods=['POST'])

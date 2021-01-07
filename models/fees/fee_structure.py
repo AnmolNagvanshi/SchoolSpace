@@ -9,7 +9,7 @@ class FeeStructure(db.Model):
     class_name = db.Column(db.String(6), nullable=True)
     amount = db.Column(db.Integer, nullable=False) 
     session = db.Column(db.String(10), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)  
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     def save_to_db(self):
         db.session.add(self)

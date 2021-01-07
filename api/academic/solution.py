@@ -2,7 +2,7 @@ from flask import request
 from app import app
 from werkzeug.utils import secure_filename
 import os
-from models.solution import Solution
+from models.academic.solution import Solution
 
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 

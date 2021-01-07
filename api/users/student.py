@@ -1,6 +1,6 @@
 from app import app, db
 from flask import request
-from models.student import Student
+from models.users.student import Student
 from werkzeug.utils import secure_filename
 import os
 from datetime import date
@@ -18,7 +18,7 @@ def index():
     return "Hello World!"
 
 
-@app.route('/registration', methods=['POST'])
+@app.route('/students', methods=['POST'])
 def register_student():
     name = request.form.get('name', None)
     gender = request.form.get('gender', None)
