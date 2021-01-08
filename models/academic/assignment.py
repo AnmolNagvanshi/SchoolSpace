@@ -7,7 +7,6 @@ def get_due_date():
 
 
 class Assignment(db.Model):
-    __tablename__ = 'assignments'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     file = db.Column(db.String(512), nullable=True)

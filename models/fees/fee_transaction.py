@@ -10,10 +10,8 @@ class PaymentMode(str, Enum):
 
 
 class FeeTransaction(db.Model):
-    __tablename__ = 'fee_transactions'
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), index=True, nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), index=True, nullable=False)
     amount = db.Column(db.Integer, nullable=True)
     session = db.Column(db.String(10), nullable=False)
     transaction_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)

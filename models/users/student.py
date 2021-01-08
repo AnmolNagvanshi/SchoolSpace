@@ -10,18 +10,30 @@ class GenderType(str, Enum):
 
 
 class Student(db.Model):
-    __tablename__ = "students"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(256), nullable=False)
+    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
+    section_id = db.Column(db.Integer, db.ForeignKey('section.id'), nullable=False)
+
+    name = db.Column(db.String(255), nullable=False)
+    registration_no = db.Column(db.String(255), nullable=False)
+    roll_no = db.Column(db.String(255), nullable=True)
+    father_name = db.Column(db.String(255), nullable=True)
+    mother_name = db.Column(db.String(255), nullable=True)
     gender = db.Column(db.Enum(GenderType), nullable=False)
-    student_class = db.Column(db.String(32), nullable=False)
-    section = db.Column(db.String(6), nullable=True)
-    mobile = db.Column(db.String(32), nullable=False)
-    father_name = db.Column(db.String(256), nullable=True)
-    address = db.Column(db.String(512), nullable=False)
-    tc = db.Column(db.String(512), nullable=True)
-    photo = db.Column(db.String(512), nullable=True)
-    migration = db.Column(db.String(512), nullable=True)
-    dob = db.Column(db.Date, nullable=False)
+    date_of_birth = db.Column(db.Date, nullable=False)
+    religion = db.Column(db.String(255), nullable=True)
+
+    email = db.Column(db.String(255), nullable=True)
+    mobile_no = db.Column(db.String(32), nullable=False)
+    address = db.Column(db.String(512), nullable=True)
+    city = db.Column(db.String(255), nullable=False)
+    state = db.Column(db.String(255), nullable=False)
+    pin_code = db.Column(db.String(255), nullable=False)
+
+    photo_path = db.Column(db.String(512), nullable=True)
+    tc_path = db.Column(db.String(512), nullable=True)
+    migration_path = db.Column(db.String(512), nullable=True)
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)

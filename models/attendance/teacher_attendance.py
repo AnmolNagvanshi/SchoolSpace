@@ -8,10 +8,10 @@ class Status(IntEnum):
     HALF_DAY = 1
     PRESENT = 2
 
-class StudentAttendance(db.Model):
+class TeacherAttendance(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), index=True, nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('student.id'), index=True, nullable=False)
     date = db.Column(db.Date, default=date.today, nullable=False)
     status = db.Column(db.Enum(Status), nullable=False)
 

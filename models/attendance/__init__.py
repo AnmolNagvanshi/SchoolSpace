@@ -1,0 +1,2 @@
+from .student_attendance import StudentAttendance
+from .teacher_attendance import TeacherAttendance

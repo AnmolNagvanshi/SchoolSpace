@@ -11,14 +11,22 @@ class GenderType(str, Enum):
 
 
 class Teacher(db.Model):
-    __tablename__ = 'teachers'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(256), nullable=False)
+
+    name = db.Column(db.String(255), nullable=False)
+    designation = db.Column(db.String(255), nullable=False)
+    date_of_birth = db.Column(db.Date, nullable=False)
     gender = db.Column(db.Enum(GenderType), nullable=False)
-    mobile = db.Column(db.String(32), nullable=False)
-    father_name = db.Column(db.String(256), nullable=True)
-    address = db.Column(db.String(512), nullable=False)
+    religion = db.Column(db.String(255), nullable=True)
+
+    email = db.Column(db.String(255), nullable=True)
+    mobile_no = db.Column(db.String(20), nullable=False)
+
+    address = db.Column(db.String(512), nullable=True)
+    joining_date = db.Column(db.Date, nullable=False)
     photo = db.Column(db.String(512), nullable=True)
-    dob = db.Column(db.Date, nullable=False)
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+

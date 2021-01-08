@@ -1,7 +1,7 @@
 import os
 from datetime import date
 
-from flask import request, send_from_directory
+from flask import request
 from werkzeug.utils import secure_filename
 
 from app import app, db
@@ -45,6 +45,3 @@ def get_assignment():
     return {"message": res}, 200
 
 
-@app.route('/static/<path:path>/<string:file>', methods=['GET', 'POST'])
-def serve_static_resources(path, file):
-    return send_from_directory(path, file)

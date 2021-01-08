@@ -3,7 +3,6 @@ from datetime import datetime
 
 
 class Enquiry(db.Model):
-    __tablename__ = 'enquiry'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     student_name = db.Column(db.String(512), nullable=False)
