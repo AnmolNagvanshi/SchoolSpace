@@ -7,8 +7,7 @@ from marshmallow.utils import EXCLUDE
 class ClassesSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Classes
-        load_only = ("password",)
-        dump_only = ("id",)
+        dump_only = ("id", 'created_at', 'updated_at')
         unknown = EXCLUDE
 
     @post_load

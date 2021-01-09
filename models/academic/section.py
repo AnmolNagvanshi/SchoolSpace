@@ -1,6 +1,5 @@
 from app import db
 from datetime import datetime
-from models.users.teacher import Teacher
 
 
 class Section(db.Model):

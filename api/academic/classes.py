@@ -1,42 +1,42 @@
 from flask import request
 from app import app, db
 from models.academic.classes import Classes
+from schemas.academic.classes import ClassesSchema
+
+class_schema = ClassesSchema()
+class_list_schema = ClassesSchema(many=True)
 
 
 @app.route('/classes', methods=['POST'])
-def add():
-    name = request.form.get('name', None)
-    section = request.form.get('section', None)
+def create_class():
+    data = request.form
+    if Classes.query.filter_by(name=data['name']).first():
+        return {"message": "name is not unique"}, 400
 
-    if not name:
-        return {"message": "You must provide class name"}, 404
+    if Classes.query.filter_by(numeric=int(data['numeric'])).first():
+        return {"message": "numeric is not unique"}, 400
 
-    if not section:
-        return {"message": "You must provide class section"}, 404
-
-    if Classes.query.filter_by(name=name, section=section).first():
-        return {"message": "Class with given section already taken"}, 404
-    else:
-        class_obj = Classes(name=name, section=section)
-        db.session.add(class_obj)
-        db.session.commit()
-        return {"message": "Data inserted successfully"}, 200
+    class_obj = class_schema.load(data)
+    db.session.add(class_obj)
+    db.session.commit()
+    return {"data": class_schema.dump(class_obj)}, 201
 
 
 @app.route('/classes', methods=['GET'])
-def get():
-    import collections
-    classes = Classes.query.all()
-    print(classes)
-
-    if classes:
-        class_dic = collections.defaultdict(list)
-        for cla in classes:
-            class_dic[cla.name].append(cla.section)
-        res = []
-        for k, v in class_dic.items():
-            res.append({'class': k, 'sections': v})
-        return {"classes": res}, 200
-
+def get_all_classes():
+    numeric = request.args.get('numeric', None)
+    if numeric:
+        class_obj = Classes.query.filter_by(numeric=int(numeric)).first()
+        return {"data": class_schema.dump(class_obj)}, 200
     else:
-        return {"message": "No classes available"}, 404
+        classes = Classes.query.all()
+        return {"data": class_list_schema.dump(classes)}, 200
+
+
+@app.route('/classes/<int:class_id>')
+def get_class_by_id(class_id):
+    class_obj = Classes.query.filter_by(id=class_id).first()
+    if not class_obj:
+        return {"message": f"class with id={class_id} not found"}, 404
+    return {"data": class_schema.dump(class_obj)}, 200
+
