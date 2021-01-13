@@ -1,6 +1,9 @@
 from app import app, db
 from flask import request
 from models.users.student import Student
+from models.academic.classes import Classes
+from models.academic.section import Section
+from schemas.users.student import StudentSchema
 from werkzeug.utils import secure_filename
 import os
 from datetime import date
@@ -13,99 +16,71 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/')
-def index():
-    return "Hello World!"
+student_schema = StudentSchema()
+student_list_schema = StudentSchema(many=True)
 
 
 @app.route('/students', methods=['POST'])
-def register_student():
-    name = request.form.get('name', None)
-    gender = request.form.get('gender', None)
-    student_class = request.form.get('student_class', None)
-    mobile = request.form.get('mobile', None)
-    father_name = request.form.get('father_name', None)
-    address = request.form.get('address', None)
-    tc = request.files.get('tc', None)
-    migration = request.files.get('migration', None)
-    photo = request.files.get('photo', None)
-    dob = request.form['dob']
+def create_student():
+    data = request.form
+    student = student_schema.load(data)
+    student.username = str(student.email)
+    student.password = str(student.email)
 
-    year, month, day = dob.split('-')
-    today = date(int(year), int(month), int(day))
+    db.session.add(student)
+    db.session.commit(student)
+    return {"data": student_schema.dump(student)}, 200
 
-    if tc:
-        tc_filename = secure_filename(tc.filename)
-        tc.save(os.path.join(app.config['UPLOAD_FOLDER_TC'], tc_filename))
-    else:
-        tc_filename = None
+    # year, month, day = dob.split('-')
+    # today = date(int(year), int(month), int(day))
 
-    if migration:
-        migration_filename = secure_filename(migration.filename)
-        migration.save(os.path.join(app.config['UPLOAD_FOLDER_MIGRATION'], migration_filename))
-    else:
-        migration_filename = None
-
-    if photo:
-        photo_filename = secure_filename(photo.filename)
-        photo.save(os.path.join(app.config['UPLOAD_FOLDER_PHOTO'], photo_filename))
-    else:
-        photo_filename = None
-
-    if not (name or gender or student_class or mobile or address or dob):
-        return {
-                   "status": 404,
-                   "message": "Missing property"
-               }, 404
-
-    else:
-        new_student = Student(name=name, gender=gender, student_class=student_class,
-                              mobile=mobile, father_name=father_name, address=address,
-                              tc=tc_filename, migration=migration_filename, dob=today, photo=photo_filename)
-        db.session.add(new_student)
-        db.session.commit()
-
-        return {
-                   "status": 200,
-                   "message": {
-                       "student_id": new_student.id
-                   }
-               }, 200
+    # if tc:
+    #     tc_filename = secure_filename(tc.filename)
+    #     tc.save(os.path.join(app.config['UPLOAD_FOLDER_TC'], tc_filename))
+    # else:
+    #     tc_filename = None
+    #
+    # if migration:
+    #     migration_filename = secure_filename(migration.filename)
+    #     migration.save(os.path.join(app.config['UPLOAD_FOLDER_MIGRATION'], migration_filename))
+    # else:
+    #     migration_filename = None
+    #
+    # if photo:
+    #     photo_filename = secure_filename(photo.filename)
+    #     photo.save(os.path.join(app.config['UPLOAD_FOLDER_PHOTO'], photo_filename))
+    # else:
+    #     photo_filename = None
 
 
-@app.route('/test', methods=['POST', 'GET'])
-def test():
-    print(request.form)
-    return request.form
+@app.route('classes/<int:class_id>/sections/<int:section_id>/students', methods=['GET'])
+def get_all_students_by_class_and_section(class_id, section_id):
+    if not Classes.query.filter_by(id=class_id).first():
+        return {"message": f"class with id={class_id} does not exist"}, 404
+
+    if not Section.query.filter_by(id=section_id, class_id=class_id).first():
+        return {"message": f"section with id={section_id} does not exist for this class"}
+
+    students = (Student.query
+                .filter_by(class_id=class_id, section_id=section_id)
+                .order_by(Student.registration_no.desc())
+                .all()
+                )
+    return {"data": student_list_schema.dump(students)}, 200
 
 
-@app.route('/students', methods=['GET'])
-def get_student_details():
-    students = Student.query.all()
-    res = []
-    if len(students) != 0:
-        for student in students:
-            obj = {'id': student.id, 'name': student.name}
-            res.append(obj)
-        return {'students': res}, 200
-
-    else:
-        return {"message": "No student"}, 404
-
-
-@app.route('/students/<int:std_id>', methods=['PATCH'])
-def update_student_section(std_id):
-    student = Student.query.filter_by(id=std_id).first()
+@app.route('/students/<int:student_id>', methods=['PATCH'])
+def update_student_section(student_id):
+    student = Student.query.filter_by(id=student_id).first()
     if not student:
-        return {"message": "Student does not exist"}, 404
+        return {"message": f"Student with id={student_id} does not exist"}, 404
 
-    new_section = request.form.get('section', None)
-    if not new_section:
-        return {"message" : "Missing section property"}, 404
+    new_section_id = request.form.get('section', None)
+    if not new_section_id:
+        return {"message": "Missing section property"}, 404
 
-    student.section = new_section
+    student.section_id = new_section_id
     db.session.add(student)
     db.session.commit()
 
     return {"message": "Student's section updated successfully"}, 200
-

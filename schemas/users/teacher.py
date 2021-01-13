@@ -8,7 +8,7 @@ class TeacherSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Teacher
         load_only = ("password",)
-        dump_only = ("id",)
+        dump_only = ("id", 'created_at', 'updated_at', 'photo')
         unknown = EXCLUDE
 
     @post_load

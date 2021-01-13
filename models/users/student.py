@@ -16,16 +16,16 @@ class Student(db.Model):
     section_id = db.Column(db.Integer, db.ForeignKey('section.id'), nullable=False)
 
     name = db.Column(db.String(255), nullable=False)
-    registration_no = db.Column(db.String(255), nullable=False)
-    roll_no = db.Column(db.String(255), nullable=True)
+    registration_no = db.Column(db.String(255), unique=True, nullable=False)
+    roll_no = db.Column(db.String(255), unique=True, nullable=True)
     father_name = db.Column(db.String(255), nullable=True)
     mother_name = db.Column(db.String(255), nullable=True)
     gender = db.Column(db.Enum(GenderType), nullable=False)
     date_of_birth = db.Column(db.Date, nullable=False)
     religion = db.Column(db.String(255), nullable=True)
 
-    email = db.Column(db.String(255), nullable=True)
-    mobile_no = db.Column(db.String(32), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True, index=True)
+    mobile_no = db.Column(db.String(32), nullable=False, unique=True, index=True)
     address = db.Column(db.String(512), nullable=True)
     city = db.Column(db.String(255), nullable=False)
     state = db.Column(db.String(255), nullable=False)
@@ -34,6 +34,9 @@ class Student(db.Model):
     photo_path = db.Column(db.String(512), nullable=True)
     tc_path = db.Column(db.String(512), nullable=True)
     migration_path = db.Column(db.String(512), nullable=True)
+
+    username = db.Column(db.String(512), default='student', nullable=False)
+    password = db.Column(db.String(512), default='student', nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)

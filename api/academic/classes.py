@@ -33,7 +33,7 @@ def get_all_classes():
         return {"data": class_list_schema.dump(classes)}, 200
 
 
-@app.route('/classes/<int:class_id>')
+@app.route('/classes/<int:class_id>', methods=['GET'])
 def get_class_by_id(class_id):
     class_obj = Classes.query.filter_by(id=class_id).first()
     if not class_obj:

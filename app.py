@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
 from flask_cors import CORS
@@ -14,9 +14,21 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db, compare_type=True)
 ma = Marshmallow(app)
 
+
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(err):
     return err.messages, 400
+
+
+@app.route('/')
+def index():
+    return "Hello World!"
+
+
+@app.route('/test', methods=['POST', 'GET'])
+def test():
+    print(request.form)
+    return request.form
 
 
 from api.academic import assignment

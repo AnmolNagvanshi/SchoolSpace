@@ -12,6 +12,8 @@ class Classes(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    sections = db.relationship('Section', backref='class_obj', lazy='dynamic')
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

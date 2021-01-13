@@ -7,8 +7,8 @@ from marshmallow.utils import EXCLUDE
 class SectionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Section
-        load_only = ("password",)
-        dump_only = ("id",)
+        include_fk = True
+        dump_only = ("class_id", 'strength', 'created_at', 'updated_at')
         unknown = EXCLUDE
 
     @post_load

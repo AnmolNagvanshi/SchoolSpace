@@ -10,7 +10,6 @@ class Section(db.Model):
 
     name = db.Column(db.String(6), nullable=False, unique=True, index=True)
     strength = db.Column(db.Integer, nullable=False, default=0)
-    numeric = db.Column(db.Integer, nullable=False, unique=True, index=True)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
