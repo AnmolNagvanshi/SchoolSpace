@@ -53,7 +53,7 @@ def create_student():
     #     photo_filename = None
 
 
-@app.route('classes/<int:class_id>/sections/<int:section_id>/students', methods=['GET'])
+@app.route('/classes/<int:class_id>/sections/<int:section_id>/students', methods=['GET'])
 def get_all_students_by_class_and_section(class_id, section_id):
     if not Classes.query.filter_by(id=class_id).first():
         return {"message": f"class with id={class_id} does not exist"}, 404
