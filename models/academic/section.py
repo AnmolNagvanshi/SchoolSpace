@@ -1,6 +1,8 @@
-from app import db
+from app import db, admin
 from datetime import datetime
-
+from flask_admin.contrib.sqla import ModelView
+from models.academic.classes import Classes
+from models.users import Teacher
 
 class Section(db.Model):
 
@@ -14,7 +16,12 @@ class Section(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    class_obj = db.relationship('Classes', backref='sections')
+    head_teacher = db.relationship('Teacher', backref='main_class')
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
 
+
+admin.add_view(ModelView(Section, db.session))

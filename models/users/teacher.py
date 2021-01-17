@@ -1,7 +1,8 @@
 from datetime import datetime
 from enum import Enum
 
-from app import db
+from app import db, admin
+from flask_admin.contrib.sqla import ModelView
 
 
 class GenderType(str, Enum):
@@ -33,3 +34,5 @@ class Teacher(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+
+admin.add_view(ModelView(Teacher, db.session))

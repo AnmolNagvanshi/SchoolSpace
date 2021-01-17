@@ -1,1 +1,1 @@
-from models import academic, attendance, fees, users, misc
+from models import academic, attendance, fees, users, misc, messages

@@ -1,6 +1,7 @@
-from app import db
+from app import db, admin
 from datetime import datetime
 from enum import Enum
+from flask_admin.contrib.sqla import ModelView
 
 
 class GenderType(str, Enum):
@@ -10,7 +11,6 @@ class GenderType(str, Enum):
 
 
 class Student(db.Model):
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
     section_id = db.Column(db.Integer, db.ForeignKey('section.id'), nullable=False)
@@ -31,12 +31,15 @@ class Student(db.Model):
     state = db.Column(db.String(255), nullable=False)
     pin_code = db.Column(db.String(255), nullable=False)
 
-    photo_path = db.Column(db.String(512), nullable=True)
-    tc_path = db.Column(db.String(512), nullable=True)
-    migration_path = db.Column(db.String(512), nullable=True)
+    photo = db.Column(db.String(512), nullable=True)
+    tc = db.Column(db.String(512), nullable=True)
+    migration = db.Column(db.String(512), nullable=True)
 
     username = db.Column(db.String(512), default='student', nullable=False)
     password = db.Column(db.String(512), default='student', nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
+admin.add_view(ModelView(Student, db.session))

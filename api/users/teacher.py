@@ -28,11 +28,11 @@ def create_teacher():
     photo = request.files.get('photo')
     if photo:
         photo_filename = secure_filename(photo.filename)
-        photo.save(os.path.join(app.config['UPLOAD_FOLDER_PHOTO'], photo_filename))
+        photo.save(os.path.join(app.config['UPLOAD_FOLDER_TEACHER_DP'], photo_filename))
         teacher.photo = photo_filename
 
     teacher.username = str(teacher.email)
-    teacher.password = str(teacher.password)
+    teacher.password = str(teacher.email)
     db.session.add(teacher)
     db.session.commit()
 
@@ -61,5 +61,5 @@ def get_teacher_by_id(id):
 
 def get_file_path(photo) -> Optional[str]:
     if photo:
-        return 'static/' + os.path.join(app.config['UPLOAD_FOLDER_TEACHER_DP']) + '/' + photo
+        return '/static/' + os.path.join(app.config['UPLOAD_FOLDER_TEACHER_DP']) + '/' + photo
     return None
