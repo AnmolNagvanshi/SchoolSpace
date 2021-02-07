@@ -36,7 +36,7 @@ def create_attendance_by_student_id(student_id):
 #     return {"data": arr}, 200
 
 
-@app.route('classes/<int:class_id>/sections/<int:section_id>/students/attendance', methods=['POST'])
+@app.route('/classes/<int:class_id>/sections/<int:section_id>/students/attendance', methods=['POST'])
 def create_student_attendance_records(class_id, section_id):
     if not Classes.query.filter_by(id=class_id).first():
         return {"message": f"class with id={class_id} does not exist"}, 404

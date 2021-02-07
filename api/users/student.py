@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 import os
 from datetime import date
 
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'mp4'}
 
 
 def allowed_file(filename):
@@ -38,14 +38,25 @@ def create_student(class_id, section_id):
     student.username = str(student.email)
     student.password = str(student.email)
 
-    save_file(request.files.get('tc'), 'TC')
-    save_file(request.files.get('migration'), 'MIGRATION')
-    save_file(request.files.get('photo'), 'PHOTO')
+    tc = request.files.get('tc')
+    migration = request.files.get('migration')
+    photo = request.files.get('photo')
+
+    save_file(tc, 'TC')
+    save_file(migration, 'MIGRATION')
+    save_file(photo, 'PHOTO')
+
+    student.tc = tc.filename if tc else None
+    student.migration = migration.filename if migration else None
+    student.photo = photo.filename if photo else None
 
     db.session.add(student)
     db.session.commit()
 
     set_file_paths(student)
+    # student.tc = get_file_path(request.files.get('tc'), 'TC')
+    # student.migration = get_file_path(request.files.get('migration'), 'MIGRATION')
+    # student.photo = get_file_path(request.files.get('photo'), 'PHOTO')
 
     return {"data": student_schema.dump(student)}, 200
 
