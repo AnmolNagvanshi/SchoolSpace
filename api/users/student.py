@@ -17,6 +17,24 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def save_file(file, file_type: str):
+    if not file:
+        return
+    filename = secure_filename(file.filename)
+    file.save(os.path.join(app.config['UPLOAD_FOLDER_' + file_type], filename))
+
+
+def get_file_path(filename: str, file_type: str) -> Optional[str]:
+    if not filename:
+        return None
+    return '/static/' + os.path.join(app.config['UPLOAD_FOLDER_' + file_type]) + '/' + filename
+
+
+def set_file_paths(student: Student):
+    student.tc = get_file_path(student.tc, 'TC')
+    student.migration = get_file_path(student.migration, 'MIGRATION')
+    student.photo = get_file_path(student.photo, 'PHOTO')
+
 
 student_schema = StudentSchema()
 student_list_schema = StudentSchema(many=True)
@@ -108,20 +126,3 @@ def update_student_section(class_id, section_id, student_id):
     return {"message": "Student's section updated successfully"}, 200
 
 
-def save_file(file, file_type: str):
-    if not file:
-        return
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER_' + file_type], filename))
-
-
-def get_file_path(filename: str, file_type: str) -> Optional[str]:
-    if not filename:
-        return None
-    return '/static/' + os.path.join(app.config['UPLOAD_FOLDER_' + file_type]) + '/' + filename
-
-
-def set_file_paths(student: Student):
-    student.tc = get_file_path(student.tc, 'TC')
-    student.migration = get_file_path(student.migration, 'MIGRATION')
-    student.photo = get_file_path(student.photo, 'PHOTO')
